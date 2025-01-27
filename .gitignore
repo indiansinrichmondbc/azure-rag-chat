@@ -1,0 +1,16 @@
+# Standard Python .gitignore entries
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+*.log
+
+# Ignore chroma_db directory
+chroma_db/
+
+# Ignore Docker-related files
+Dockerfile
+.dockerignore

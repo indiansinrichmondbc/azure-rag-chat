@@ -1,0 +1,14 @@
+# Ignore unnecessary files and directories
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info
+dist/
+build/
+*.log
+
+# Ignore chroma_db directory
+chroma_db/
+
+# Ignore .git directory
+.git/
