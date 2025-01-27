@@ -1,2 +1,1 @@
-# azure-rag-chat
-A repository for modern RAG chat with Azure OpenAI
+This repository is empty. Any task executed on it should be considered a new capability and needs to be created.
