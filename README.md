@@ -8,6 +8,31 @@ This repository contains a Streamlit application that allows users to upload tex
 - Azure account (for deploying on Azure Linux)
 - Azure CLI (for deploying on Azure Docker Linux App Service Plan)
 
+## Folder Structure
+
+The project now follows a new folder structure:
+
+```
+.
+├── deployment
+│   ├── azuredeploy.sh
+│   └── localdeploy.sh
+├── src
+│   ├── app.py
+│   ├── azure_config.py
+│   ├── chat_chain.py
+│   ├── chat_history.py
+│   ├── create_postgresql.py
+│   └── document_processor.py
+├── .dockerignore
+├── .env
+├── .gitignore
+├── Dockerfile
+├── pyproject.toml
+├── requirements.txt
+└── README.md
+```
+
 ## Building and Running the Docker Container Locally
 
 1. Clone the repository:
@@ -113,7 +138,7 @@ This repository contains a Streamlit application that allows users to upload tex
 3. Run the `azuredeploy.sh` script to deploy the application:
 
    ```sh
-   ./azuredeploy.sh
+   ./deployment/azuredeploy.sh
    ```
 
 4. Follow the instructions in the script to complete the deployment.
