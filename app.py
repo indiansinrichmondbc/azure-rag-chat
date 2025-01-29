@@ -12,21 +12,22 @@ import os
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "vector_store" not in st.session_state:
-    # Try to load existing vector store
+    st.session_state.vector_store = None
+
+# Try to load existing vector store
+if st.session_state.vector_store is None:
     conn = psycopg2.connect(
-        dbname=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASSWORD"),
-        host=os.getenv("POSTGRES_HOST"),
-        port=os.getenv("POSTGRES_PORT")
+        dbname=os.getenv("AZURE_POSTGRES_DB"),
+        user=os.getenv("AZURE_POSTGRES_USER"),
+        password=os.getenv("AZURE_POSTGRES_PASSWORD"),
+        host=os.getenv("AZURE_POSTGRES_HOST"),
+        port=os.getenv("AZURE_POSTGRES_PORT")
     )
     cur = conn.cursor()
     cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name=%s)", ('vector_store',))
     exists = cur.fetchone()[0]
     if exists:
         st.session_state.vector_store = "PostgreSQL Vector Store"
-    else:
-        st.session_state.vector_store = None
     cur.close()
     conn.close()
 if "memory_store" not in st.session_state:
@@ -55,11 +56,11 @@ if not st.session_state.use_existing_docs:
 else:
     # Check if we have existing documents
     conn = psycopg2.connect(
-        dbname=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASSWORD"),
-        host=os.getenv("POSTGRES_HOST"),
-        port=os.getenv("POSTGRES_PORT")
+        dbname=os.getenv("AZURE_POSTGRES_DB"),
+        user=os.getenv("AZURE_POSTGRES_USER"),
+        password=os.getenv("AZURE_POSTGRES_PASSWORD"),
+        host=os.getenv("AZURE_POSTGRES_HOST"),
+        port=os.getenv("AZURE_POSTGRES_PORT")
     )
     cur = conn.cursor()
     cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name=%s)", ('vector_store',))
@@ -128,6 +129,3 @@ if st.session_state.vector_store:
             st.subheader("📝 Memory Store")
             for key, value in st.session_state.memory_store.items():
                 st.text(f"{key}: {value}")
-
-if __name__ == "__main__":
-    st.run(port=8000)
