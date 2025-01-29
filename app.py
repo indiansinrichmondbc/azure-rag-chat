@@ -128,3 +128,6 @@ if st.session_state.vector_store:
             st.subheader("📝 Memory Store")
             for key, value in st.session_state.memory_store.items():
                 st.text(f"{key}: {value}")
+
+if __name__ == "__main__":
+    st.run(port=8000)
