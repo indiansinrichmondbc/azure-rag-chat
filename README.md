@@ -6,6 +6,7 @@ This repository contains a Streamlit application that allows users to upload tex
 
 - Docker
 - Azure account (for deploying on Azure Linux)
+- Azure CLI (for deploying on Azure Docker Linux App Service Plan)
 
 ## Building and Running the Docker Container Locally
 
@@ -93,3 +94,28 @@ This repository contains a Streamlit application that allows users to upload tex
    ```
 
 6. Open your web browser and go to `http://<dns-name-label>.<region>.azurecontainer.io:8501` to access the application.
+
+## Deploying the Application on Azure Docker Linux App Service Plan
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/githubnext/workspace-blank.git
+   cd workspace-blank
+   ```
+
+2. Ensure you have the Azure CLI installed and logged in:
+
+   ```sh
+   az login
+   ```
+
+3. Run the `azuredeploy.sh` script to deploy the application:
+
+   ```sh
+   ./azuredeploy.sh
+   ```
+
+4. Follow the instructions in the script to complete the deployment.
+
+5. Open your web browser and go to the URL provided by the Azure App Service to access the application.
