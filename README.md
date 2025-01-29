@@ -119,3 +119,18 @@ This repository contains a Streamlit application that allows users to upload tex
 4. Follow the instructions in the script to complete the deployment.
 
 5. Open your web browser and go to the URL provided by the Azure App Service to access the application.
+   
+## Updating the Dependencies
+
+The application now includes the following dependencies:
+
+- langchain_core
+- langchain_community
+- psycopg2-binary
+- azure-ai-textanalytics==5.1.0
+- azure-identity
+- azure-keyvault-secrets
+- azure-storage-blob
+- openai
+
+Make sure to update your `requirements.txt` and `pyproject.toml` files to include these dependencies.
