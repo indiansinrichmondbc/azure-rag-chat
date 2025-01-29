@@ -1,3 +1,5 @@
+.venv/
+
 # Standard Python .gitignore entries
 __pycache__/
 *.py[cod]
