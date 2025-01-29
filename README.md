@@ -30,6 +30,36 @@ This repository contains a Streamlit application that allows users to upload tex
 
 4. Open your web browser and go to `http://localhost:8501` to access the application.
 
+## Running the Application Locally using `run.cmd`
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/githubnext/workspace-blank.git
+   cd workspace-blank
+   ```
+
+2. Create a virtual environment and activate it:
+
+   ```sh
+   python -m venv .venv
+   .venv\Scripts\activate
+   ```
+
+3. Install the dependencies:
+
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+4. Run the application using the `run.cmd` file:
+
+   ```sh
+   run.cmd
+   ```
+
+5. Open your web browser and go to `http://localhost:8501` to access the application.
+
 ## Deploying the Docker Container on Azure Linux
 
 1. Create a new Azure Container Registry (ACR) if you don't have one:

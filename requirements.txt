@@ -2,7 +2,7 @@ streamlit
 langchain_core
 langchain_community
 psycopg2
-azure-ai-textanalytics
+azure-ai-textanalytics==5.1.0
 azure-identity
 azure-keyvault-secrets
 azure-storage-blob
