@@ -6,7 +6,7 @@ set -e
 echo "Starting local deployment..."
 
 # Create local directories if they don't exist
-mkdir -p ./temp_docs ./chroma_db
+mkdir -p ./temp_docs
 
 # Build the Docker image
 echo "Building Docker image..."
@@ -23,7 +23,6 @@ docker run -d \
     --env-file .env \
     -p 8000:8000 \
     -v "$(pwd)/temp_docs:/app/temp_docs" \
-    -v "$(pwd)/chroma_db:/app/chroma_db" \
     rag-app:local
 
 # Wait for the application to start

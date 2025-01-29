@@ -1,6 +1,6 @@
 # Modern RAG Chat with Azure OpenAI
 
-This repository contains a Streamlit application that allows users to upload text documents, process them into a vector store using Chroma, and interact with the documents through a conversational RAG (Retrieval-Augmented Generation) chain powered by Azure OpenAI.
+This repository contains a Streamlit application that allows users to upload text documents, process them into a vector store using PostgreSQL, and interact with the documents through a conversational RAG (Retrieval-Augmented Generation) chain powered by Azure OpenAI.
 
 ## Prerequisites
 

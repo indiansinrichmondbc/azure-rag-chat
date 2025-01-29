@@ -1,13 +1,26 @@
-from langchain_community.vectorstores.chroma import Chroma
+import psycopg2
 from azure_config import embeddings
 import os
 
 def process_documents(uploaded_files):
-    # Create a new Chroma vector store
-    vector_store = Chroma(
-        persist_directory="/app/chroma_db",
-        embedding_function=embeddings
+    # Connect to PostgreSQL
+    conn = psycopg2.connect(
+        dbname=os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD"),
+        host=os.getenv("POSTGRES_HOST"),
+        port=os.getenv("POSTGRES_PORT")
     )
+    cur = conn.cursor()
+
+    # Create vector_store table if it doesn't exist
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS vector_store (
+            id SERIAL PRIMARY KEY,
+            content TEXT
+        )
+    """)
+    conn.commit()
 
     # Process each uploaded file
     for uploaded_file in uploaded_files:
@@ -15,9 +28,10 @@ def process_documents(uploaded_files):
         content = uploaded_file.read().decode("utf-8")
         
         # Add the content to the vector store
-        vector_store.add_texts([content])
+        cur.execute("INSERT INTO vector_store (content) VALUES (%s)", (content,))
+    
+    conn.commit()
+    cur.close()
+    conn.close()
 
-    # Save the vector store to the specified directory
-    vector_store.persist()
-
-    return vector_store
+    return "PostgreSQL Vector Store"

@@ -4,7 +4,7 @@ from document_processor import process_documents
 from chat_chain import create_chat_chain
 from chat_history import get_session_history
 
-from langchain_community.vectorstores.chroma import Chroma
+import psycopg2
 from azure_config import embeddings
 import os
 
@@ -13,13 +13,22 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "vector_store" not in st.session_state:
     # Try to load existing vector store
-    if os.path.exists("/app/chroma_db"):
-        st.session_state.vector_store = Chroma(
-            persist_directory="/app/chroma_db",
-            embedding_function=embeddings
-        )
+    conn = psycopg2.connect(
+        dbname=os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD"),
+        host=os.getenv("POSTGRES_HOST"),
+        port=os.getenv("POSTGRES_PORT")
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name=%s)", ('vector_store',))
+    exists = cur.fetchone()[0]
+    if exists:
+        st.session_state.vector_store = "PostgreSQL Vector Store"
     else:
         st.session_state.vector_store = None
+    cur.close()
+    conn.close()
 if "memory_store" not in st.session_state:
     st.session_state.memory_store = {}
 if "use_existing_docs" not in st.session_state:
@@ -45,17 +54,26 @@ if not st.session_state.use_existing_docs:
             st.success("Documents processed successfully!")
 else:
     # Check if we have existing documents
-    if os.path.exists("/app/chroma_db"):
+    conn = psycopg2.connect(
+        dbname=os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD"),
+        host=os.getenv("POSTGRES_HOST"),
+        port=os.getenv("POSTGRES_PORT")
+    )
+    cur = conn.cursor()
+    cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name=%s)", ('vector_store',))
+    exists = cur.fetchone()[0]
+    if exists:
         if st.session_state.vector_store is None:
-            st.session_state.vector_store = Chroma(
-                persist_directory="/app/chroma_db",
-                embedding_function=embeddings
-            )
+            st.session_state.vector_store = "PostgreSQL Vector Store"
         st.success("Using existing documents from the database")
     else:
         st.warning("No existing documents found in the database. Please upload new documents.")
         st.session_state.use_existing_docs = False
         st.rerun()
+    cur.close()
+    conn.close()
 
 # Chat interface
 if st.session_state.vector_store:

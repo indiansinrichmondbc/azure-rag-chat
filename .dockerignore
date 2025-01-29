@@ -7,8 +7,5 @@ dist/
 build/
 *.log
 
-# Ignore chroma_db directory
-chroma_db/
-
 # Ignore .git directory
 .git/
