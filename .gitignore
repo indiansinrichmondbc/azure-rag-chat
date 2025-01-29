@@ -1,4 +1,5 @@
 .venv/
+.env 
 
 # Standard Python .gitignore entries
 __pycache__/
