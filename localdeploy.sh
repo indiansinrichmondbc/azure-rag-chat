@@ -5,6 +5,9 @@ set -e
 
 echo "Starting local deployment..."
 
+# Install PostgreSQL client and libpq-dev
+sudo apt-get update && sudo apt-get install -y postgresql-client libpq-dev
+
 # Create local directories if they don't exist
 mkdir -p ./temp_docs
 
