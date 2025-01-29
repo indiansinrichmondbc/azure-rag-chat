@@ -24,7 +24,7 @@ echo "Starting container..."
 docker run -d \
     --name rag-app \
     --env-file .env \
-    -p 8000:8000 \
+    -p 8501:8501 \
     -v "$(pwd)/temp_docs:/app/temp_docs" \
     rag-app:local
 
@@ -36,7 +36,7 @@ sleep 5
 CONTAINER_STATUS=$(docker ps -f name=rag-app --format "{{.Status}}")
 if [[ $CONTAINER_STATUS == *"Up"* ]]; then
     echo "Application is running!"
-    echo "Access the application at: http://localhost:8000"
+    echo "Access the application at: http://localhost:8501"
     echo "View container logs with: docker logs rag-app"
 else
     echo "Container failed to start. Checking logs..."
