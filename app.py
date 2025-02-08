@@ -4,10 +4,6 @@ from document_processor import process_documents
 from chat_chain import create_chat_chain
 from chat_history import get_session_history
 
-import psycopg2
-from azure_config import embeddings
-import os
-
 # Initialize session state
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -16,20 +12,10 @@ if "vector_store" not in st.session_state:
 
 # Try to load existing vector store
 if st.session_state.vector_store is None:
-    conn = psycopg2.connect(
-        dbname=os.getenv("AZURE_POSTGRES_DB"),
-        user=os.getenv("AZURE_POSTGRES_USER"),
-        password=os.getenv("AZURE_POSTGRES_PASSWORD"),
-        host=os.getenv("AZURE_POSTGRES_HOST"),
-        port=os.getenv("AZURE_POSTGRES_PORT")
-    )
-    cur = conn.cursor()
-    cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name=%s)", ('vector_store',))
-    exists = cur.fetchone()[0]
-    if exists:
-        st.session_state.vector_store = "PostgreSQL Vector Store"
-    cur.close()
-    conn.close()
+    if "vector_store" in st.session_state:
+        st.session_state.vector_store = st.session_state.vector_store
+    else:
+        st.session_state.vector_store = "Local Storage Vector Store"
 if "memory_store" not in st.session_state:
     st.session_state.memory_store = {}
 if "use_existing_docs" not in st.session_state:
@@ -55,26 +41,13 @@ if not st.session_state.use_existing_docs:
             st.success("Documents processed successfully!")
 else:
     # Check if we have existing documents
-    conn = psycopg2.connect(
-        dbname=os.getenv("AZURE_POSTGRES_DB"),
-        user=os.getenv("AZURE_POSTGRES_USER"),
-        password=os.getenv("AZURE_POSTGRES_PASSWORD"),
-        host=os.getenv("AZURE_POSTGRES_HOST"),
-        port=os.getenv("AZURE_POSTGRES_PORT")
-    )
-    cur = conn.cursor()
-    cur.execute("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name=%s)", ('vector_store',))
-    exists = cur.fetchone()[0]
-    if exists:
-        if st.session_state.vector_store is None:
-            st.session_state.vector_store = "PostgreSQL Vector Store"
-        st.success("Using existing documents from the database")
+    if "vector_store" in st.session_state:
+        st.session_state.vector_store = st.session_state.vector_store
+        st.success("Using existing documents from local storage")
     else:
-        st.warning("No existing documents found in the database. Please upload new documents.")
+        st.warning("No existing documents found in local storage. Please upload new documents.")
         st.session_state.use_existing_docs = False
         st.rerun()
-    cur.close()
-    conn.close()
 
 # Chat interface
 if st.session_state.vector_store:
